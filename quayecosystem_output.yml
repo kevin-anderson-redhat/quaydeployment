@@ -1,2 +1,75 @@
-NAME                    AGE
-example-quayecosystem   3m32s
+apiVersion: v1
+items:
+- apiVersion: redhatcop.redhat.io/v1alpha1
+  kind: QuayEcosystem
+  metadata:
+    creationTimestamp: "2020-04-24T20:27:38Z"
+    generation: 2
+    name: example-quayecosystem
+    namespace: quay-enterprise
+    resourceVersion: "2123749"
+    selfLink: /apis/redhatcop.redhat.io/v1alpha1/namespaces/quay-enterprise/quayecosystems/example-quayecosystem
+    uid: cd7aee24-cebb-444f-ad8b-a1bedd0265f0
+  spec:
+    quay:
+      configResources: {}
+      database:
+        deploymentStrategy: RollingUpdate
+        image: registry.access.redhat.com/rhscl/postgresql-96-rhel7:1
+        livenessProbe:
+          exec:
+            command:
+            - /usr/libexec/check-container
+            - --live
+          failureThreshold: 3
+          initialDelaySeconds: 120
+          timeoutSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - /usr/libexec/check-container
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          timeoutSeconds: 1
+        resources: {}
+        volumeSize: 50Gi
+      deploymentStrategy: RollingUpdate
+      externalAccessType: Route
+      image: quay.io/redhat/quay:v3.2.0
+      imagePullSecretName: redhat-quay-pull-secret
+      livenessProbe:
+        initialDelaySeconds: 150
+      migrationPhase: new-installation
+      readinessProbe:
+        initialDelaySeconds: 60
+      registryBackends:
+      - local:
+          storagePath: /datastorage/registry
+        name: local
+      registryStorage:
+        persistentVolumeAccessModes:
+        - ReadWriteOnce
+        persistentVolumeSize: 50Gi
+        persistentVolumeStorageClassName: infra
+      repoMirrorResources: {}
+      resources: {}
+    redis:
+      deploymentStrategy: RollingUpdate
+      image: registry.access.redhat.com/rhscl/redis-32-rhel7:latest
+      readinessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 30
+        tcpSocket:
+          port: 6379
+      resources: {}
+  status:
+    conditions:
+    - lastTransitionTime: "2020-04-24T20:27:38Z"
+      lastUpdateTime: "2020-04-24T20:27:38Z"
+      message: Configuration Updated Successfully
+      status: "True"
+      type: UpdateDefaultConfigurationSuccess
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
